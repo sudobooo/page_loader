@@ -33,7 +33,7 @@ def test_dowloads():
         m.get(URL, text=EXPECTED_DOWNLOAD)
 
         expected_path = get_path(tmpdir, EXPECTED_CONVERT_URL)
-        actual_path = download(tmpdir, URL)
+        actual_path = download(URL, tmpdir)
         assert actual_path == expected_path
 
         actual_file = read(actual_path)
