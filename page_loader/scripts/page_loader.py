@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 
 """page_loader script."""
-from page_loader.cli import parse_cli_args as args
+from page_loader.cli import parse_cli_args
+from page_loader import download
 
 
 def main():
 
-    print(args())
+    args = parse_cli_args()
+
+    print(download(args.url, args.output))
 
 
 if __name__ == '__main__':
