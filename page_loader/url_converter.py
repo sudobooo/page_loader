@@ -11,9 +11,14 @@ def convert_name(text):
 
 def convert(text, type='html'):
     result = convert_name(text)
+    type_dict = {'html': '.html',
+                 'dir': '_files',
+                 'png': '.png'
+                 }
+    extension = type_dict.get(type)
 
-    if type == 'html':
-        result += '.html'
-    elif type == 'dir':
-        result += '_files'
-    return result
+    try:
+        result += extension
+        return result
+    except TypeError:
+        return 'This file or directory extension is not supported!'
