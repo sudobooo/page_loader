@@ -7,12 +7,14 @@ from page_loader.url_converter import convert
 
 
 URL = 'https://ru.hexlet.io/courses'
-URL_IMAGE = 'https://ru.hexlet.io/assets/professions/nodejs.png'
-EXPECTED_CONVERT_URL = 'ru-hexlet-io-courses.html'
+URL_IMAGE = 'https://ru.hexlet.io/assets/professions/python.png'
+EXPECTED_NAME = 'ru-hexlet-io-courses.html'
+EXPECTED_DIR = 'ru-hexlet-io-courses_files'
+EXPECTED_IMG = 'ru-hexlet-io-assets-professions-python.png'
 
 
-def get_path(path_, name):
-    return os.path.join('tests', path_, name)
+def get_path(name, path='fixtures'):
+    return os.path.join('tests', path, name)
 
 
 def get_content(file):
@@ -26,15 +28,16 @@ def read(file_path):
     return result
 
 
-raw = read(get_path('fixtures', 'raw.html'))
-expected_html = read(get_path('fixtures', 'expected.html'))
-image = get_content(get_path('fixtures', 'image.png'))
+raw = read(get_path('raw.html'))
+expected_html = read(get_path(EXPECTED_NAME))
+directory = get_path(EXPECTED_DIR)
+image = get_content(os.path.join(directory, EXPECTED_IMG))
 
 
 def test_convert_url():
 
     actual = convert(URL)
-    assert actual == EXPECTED_CONVERT_URL
+    assert actual == EXPECTED_NAME
 
 
 def test_dowloads():
@@ -43,7 +46,7 @@ def test_dowloads():
         m.get(URL, text=raw)
         m.get(URL_IMAGE, content=image)
 
-        expected_path = get_path(tmpdir, EXPECTED_CONVERT_URL)
+        expected_path = get_path(EXPECTED_NAME, path=tmpdir)
         actual_path = download(URL, tmpdir)
         assert actual_path == expected_path
 
