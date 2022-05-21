@@ -16,7 +16,7 @@ def download(url, path_to_dir=os.getcwd()):
         os.mkdir(actual_path)
 
     soup = BeautifulSoup(response, 'html.parser')
-    download_img(soup, url, dir)
+    download_img(soup, url, dir, actual_path)
 
     write_html(actual_path_html, soup.prettify())
 

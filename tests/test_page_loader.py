@@ -7,14 +7,16 @@ from page_loader.url_converter import convert
 
 
 URL = 'https://ru.hexlet.io/courses'
-URL_IMAGE = 'https://ru.hexlet.io/assets/professions/python.png'
-EXPECTED_NAME = 'ru-hexlet-io-courses.html'
-EXPECTED_DIR = 'ru-hexlet-io-courses_files'
-EXPECTED_IMG = 'ru-hexlet-io-assets-professions-python.png'
+URL_IMG = 'https://ru.hexlet.io/assets/professions/python.png'
 
+RAW = 'tests/fixtures/raw.html'
+IMG = 'tests/fixtures/image.png'
+RESULT_HTML = 'tests/fixtures/expected.html'
 
-def get_path(name, path='fixtures'):
-    return os.path.join('tests', path, name)
+DIRECTORY = 'ru-hexlet-io-courses_files'
+EXPECTED_HTML = 'ru-hexlet-io-courses.html'
+EXPECTED_IMG = os.path.join(DIRECTORY,
+                            'ru-hexlet-io-assets-professions-python.png')
 
 
 def get_content(file):
@@ -22,33 +24,35 @@ def get_content(file):
         return file.read()
 
 
-def read(file_path):
-    with open(file_path, 'r') as f:
-        result = f.read()
-    return result
-
-
-raw = read(get_path('raw.html'))
-expected_html = read(get_path(EXPECTED_NAME))
-directory = get_path(EXPECTED_DIR)
-image = get_content(os.path.join(directory, EXPECTED_IMG))
+def read(file):
+    with open(file, 'r') as f:
+        return f.read()
 
 
 def test_convert_url():
 
     actual = convert(URL)
-    assert actual == EXPECTED_NAME
+    assert actual == EXPECTED_HTML
 
 
 def test_dowloads():
+    html_code = get_content(RAW).decode()
+    html_result = read(RESULT_HTML)
+    image = get_content(IMG)
 
     with requests_mock.Mocker() as m, TemporaryDirectory() as tmpdir:
-        m.get(URL, text=raw)
-        m.get(URL_IMAGE, content=image)
+        m.get(URL, text=html_code)
+        m.get(URL_IMG, content=image)
+        download(URL, path_to_dir=tmpdir)
 
-        expected_path = get_path(EXPECTED_NAME, path=tmpdir)
-        actual_path = download(URL, tmpdir)
-        assert actual_path == expected_path
+        path_to_html = os.path.join(tmpdir, EXPECTED_HTML)
+        path_to_img = os.path.join(tmpdir, EXPECTED_IMG)
 
-        actual_file = read(actual_path)
-        assert actual_file == expected_html
+        result_html = get_content(path_to_html).decode()
+        assert result_html == html_result
+
+        result_img = get_content(path_to_img)
+        assert result_img == image
+
+        path = os.path.join(tmpdir, DIRECTORY)
+        assert len(os.listdir(path)) == 1
