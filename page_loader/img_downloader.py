@@ -1,7 +1,7 @@
 import os
 import requests
 
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 from page_loader.url_converter import convert
 
 
@@ -12,6 +12,8 @@ def download_img(data, url, dir, path):
     for teg in block:
         image = teg.get('src')
         if image.startswith('http'):
+            if not same_netloc(image, url):
+                continue
             image_link = image
         else:
             if not image.startswith('/'):
@@ -35,3 +37,11 @@ def write_html(path, content):
 def write_img(path, content):
     with open(path, "wb") as file:
         file.write(content)
+
+
+def same_netloc(first_url, second_url):
+
+    first_parse_link = urlparse(first_url)
+    second_parse_link = urlparse(second_url)
+
+    return first_parse_link.netloc == second_parse_link.netloc
