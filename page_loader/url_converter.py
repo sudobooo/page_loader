@@ -1,21 +1,40 @@
 import re
-import os
 from urllib.parse import urlparse
 
 
-def convert(url, type='html'):
+def convert_name(url):
+
     parse_link = urlparse(url)
-    path = ''.join([parse_link.netloc, parse_link.path])
-    file_name, extension = os.path.splitext(path)
-    result = re.sub(r"\W", "-", file_name)
-
-    type_dict = {'html': '.html',
-                 'dir': '_files',
-                 'png': '.png'
-                 }
-    type_file = type_dict.get(type)
-
-    if extension == type_file:
-        return f'{result}{extension}'
+    without_scheme = parse_link.netloc
+    format = f"{parse_link.path.split('.')[-1]}".rstrip('/')
+    if len(format) >= 0:
+        path = parse_link.path[:-len(format) - 1].rstrip('/')
+    if len(path) != 0:
+        result = replace_chars(f'{without_scheme}{path}')
     else:
-        return f'{result}{extension}{type_file}'
+        result = replace_chars(f'{without_scheme}{format}')
+        format = ''
+
+    return result, format
+
+
+def convert(text, type=None):
+
+    result, format = convert_name(text)
+    type_dict = {'html': '.html',
+                 'dir': '_files'
+                 }
+
+    if type is not None:
+        extension = type_dict.get(type)
+        output = f'{result}{extension}'
+    else:
+        output = f'{result}.{format}'
+    return output
+
+
+def replace_chars(text):
+
+    result = re.sub(r"[^0-9a-zA-Z]", "-", f'{text}')
+
+    return result
