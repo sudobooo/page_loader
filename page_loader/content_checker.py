@@ -13,9 +13,8 @@ def check_content(url, content):
 
     if content.startswith('http'):
         if not same_netloc(content, url):
-            content_link = same_netloc(content, url)
-        else:
-            content_link = content
+            return False
+        content_link = content
     else:
         if not content.startswith('/'):
             content = '/' + content
