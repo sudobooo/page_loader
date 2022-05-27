@@ -1,8 +1,5 @@
-import logging
+from page_loader.logging_settings import log_error, log_info
 from urllib.parse import urljoin, urlparse
-
-
-log_err = logging.getLogger('page-loader-err')
 
 
 def same_netloc(first_url, second_url):
@@ -15,6 +12,9 @@ def same_netloc(first_url, second_url):
 
 def check_content(url, content, teg):
 
+    NOT_FOUND_CLI = f"Attributes src or href weren't found in teg {teg.name}"
+    NOT_FOUND_FILE = f"Attributes src or href weren't found in {teg}\n"
+
     try:
         if content.startswith('http'):
             if not same_netloc(content, url):
@@ -26,4 +26,5 @@ def check_content(url, content, teg):
         content_link = urljoin(url, content)
         return content_link
     except AttributeError:
-        log_err.error(f"Attributes src or href weren't found in a tag {teg}\n")
+        log_info.info(NOT_FOUND_CLI)
+        log_error.error(NOT_FOUND_FILE)

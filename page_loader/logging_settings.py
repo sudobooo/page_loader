@@ -1,3 +1,5 @@
+import logging
+
 ERROR_LOG_FILENAME = ".page-loader-errors.log"
 
 LOGGING_CONFIG = {
@@ -33,7 +35,7 @@ LOGGING_CONFIG = {
                 "verbose_output",
             ],
         },
-        "page-loader-err": {
+        "page-loader-error": {
             "level": "ERROR",
             "handlers": [
                 "logfile",
@@ -41,3 +43,6 @@ LOGGING_CONFIG = {
         },
     }
 }
+
+log_error = logging.getLogger('page-loader-error')
+log_info = logging.getLogger('page-loader-info')

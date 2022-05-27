@@ -4,9 +4,10 @@ import requests
 from page_loader.url_converter import convert
 from page_loader.content_checker import check_content
 from page_loader.writer import write_content
+from page_loader.logging_settings import log_info
 
 
-def download_img(data, url, dir, path):
+def download_content(data, url, dir, path):
 
     TAGS_AND_ATTRIBUTES = {
         'img': 'src',
@@ -21,8 +22,10 @@ def download_img(data, url, dir, path):
         if not content_link:
             continue
 
-        path_image = os.path.join(path, convert(content_link))
+        path_content = os.path.join(path, convert(content_link))
         teg[attribute] = os.path.join(dir, convert(content_link))
 
         image_response = requests.get(content_link).content
-        write_content(path_image, image_response)
+        write_content(path_content, image_response)
+        SUCCES = f'Content was downloaded while pathing to {path_content}'
+        log_info.info(SUCCES)

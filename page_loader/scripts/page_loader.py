@@ -2,11 +2,15 @@
 
 """page_loader script."""
 import os
+import sys
 import argparse
 import logging.config
 
 from page_loader import download
 from page_loader.logging_settings import LOGGING_CONFIG
+from page_loader.logging_settings import log_error, log_info
+
+CHECK_URL = 'Failed to access the site. Please check the url.'
 
 
 def main():
@@ -49,7 +53,12 @@ def main():
 
     args = parser.parse_args()
 
-    print(download(args.url, args.output))
+    try:
+        print(download(args.url, args.output))
+    except UnboundLocalError as unbound_local_error:
+        log_error.error(unbound_local_error)
+        log_info.info(CHECK_URL)
+        sys.exit(1)
 
 
 if __name__ == '__main__':
