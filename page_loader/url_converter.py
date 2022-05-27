@@ -27,9 +27,10 @@ def convert(text, type=None):
 
     if type is not None:
         extension = type_dict.get(type)
-        output = f'{result}{extension}'
-    else:
-        output = f'{result}.{format}'
+        return f'{result}{extension}'
+    output = f'{result}.{format}'
+    if output.endswith('.'):
+        output += 'html'
     return output
 
 

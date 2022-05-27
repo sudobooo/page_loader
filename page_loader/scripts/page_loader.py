@@ -3,10 +3,15 @@
 """page_loader script."""
 import os
 import argparse
+import logging.config
+
 from page_loader import download
+from page_loader.logging_settings import LOGGING_CONFIG
 
 
 def main():
+
+    logging.config.dictConfig(LOGGING_CONFIG)
 
     parser = argparse.ArgumentParser(
         description='description: web page downloader',

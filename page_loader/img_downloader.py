@@ -17,7 +17,7 @@ def download_img(data, url, dir, path):
     for teg in data.find_all(TAGS_AND_ATTRIBUTES.keys()):
         attribute = TAGS_AND_ATTRIBUTES.get(teg.name)
         content = teg.get(attribute)
-        content_link = check_content(url, content)
+        content_link = check_content(url, content, teg)
         if not content_link:
             continue
 
