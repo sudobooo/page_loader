@@ -10,7 +10,9 @@ from page_loader import download
 from page_loader.logging_settings import LOGGING_CONFIG
 from page_loader.logging_settings import log_error, log_info
 
-CHECK_URL = 'Failed to access the site. Please check the url.'
+CHECK_PERMISSION = 'Check directory permissions: '
+CHECK_FILE = 'File or directory does not exist: '
+CHECK_OPTION = 'Please write "-h" to see the available options'
 
 
 def main():
@@ -55,9 +57,17 @@ def main():
 
     try:
         print(download(args.url, args.output))
-    except UnboundLocalError as unbound_local_error:
-        log_error.error(unbound_local_error)
-        log_info.info(CHECK_URL)
+    except PermissionError as permission:
+        log_error.error(permission)
+        log_info.info(f'{CHECK_PERMISSION}{permission.filename}')
+        sys.exit(1)
+    except FileNotFoundError as file_not_found:
+        log_error.error(file_not_found)
+        log_info.info(f'{CHECK_FILE}{file_not_found.filename}')
+        sys.exit(1)
+    except KeyError as key_error:
+        log_error.error(key_error)
+        log_info.info(CHECK_OPTION)
         sys.exit(1)
 
 
