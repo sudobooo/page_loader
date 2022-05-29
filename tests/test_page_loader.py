@@ -2,6 +2,7 @@ import os
 import requests_mock
 import pytest
 from tempfile import TemporaryDirectory
+from requests.exceptions import Timeout, ConnectionError, HTTPError
 
 from page_loader.page_downloader import download
 from page_loader.url_converter import convert
@@ -91,3 +92,12 @@ def test_dowloads():
 
         actual_path = os.path.join(tmpdir, DIRECTORY)
         assert len(os.listdir(actual_path)) == 3
+
+
+@pytest.mark.parametrize('not_content', [
+    Timeout, ConnectionError, HTTPError, PermissionError, FileNotFoundError])
+def test_response_with_error(not_content):
+    with requests_mock.Mocker() as m, TemporaryDirectory() as tmpdir:
+        m.get(URL, exc=not_content)
+        with pytest.raises(Exception):
+            assert download(URL, tmpdir)

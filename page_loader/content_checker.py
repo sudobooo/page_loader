@@ -12,7 +12,8 @@ def same_netloc(first_url, second_url):
 
 def check_content(url, content, teg):
 
-    NOT_FOUND_CLI = f"Attributes src or href weren't found in teg {teg.name}"
+    NOT_FOUND_CLI = f"Needed attributes weren't found in teg '{teg.name}'."
+    CHECK_LOGS = 'Check the logs for details'
     NOT_FOUND_FILE = f"Attributes src or href weren't found in {teg}\n"
 
     try:
@@ -26,5 +27,5 @@ def check_content(url, content, teg):
         content_link = urljoin(url, content)
         return content_link
     except AttributeError:
-        log_info.info(NOT_FOUND_CLI)
+        log_info.info(f'{NOT_FOUND_CLI} {CHECK_LOGS}')
         log_error.error(NOT_FOUND_FILE)

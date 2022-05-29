@@ -1,6 +1,5 @@
 import requests
 import os
-import sys
 from page_loader.logging_settings import log_error, log_info
 from bs4 import BeautifulSoup
 
@@ -25,16 +24,17 @@ def download(url, actual_path=os.getcwd()):
         soup = BeautifulSoup(response, 'html.parser')
         download_content(soup, url, dir, path_to_dir)
         write_html(path_html, soup.prettify())
+        log_info.info(f'HTML file was downloaded while pathing to {path_html}')
         return path_to_dir
     except requests.exceptions.Timeout as timeout:
         log_error.error(timeout)
         log_info.info(f'{CHECK_URL} {url}')
-        sys.exit(1)
+        raise timeout
     except requests.exceptions.HTTPError as http_error:
         log_error.error(http_error)
         log_info.info(f'{CHECK_URL} {url}')
-        sys.exit(1)
+        raise http_error
     except requests.exceptions.ConnectionError as connection_error:
         log_error.error(connection_error)
         log_info.info(f'{CHECK_URL} {url}')
-        sys.exit(1)
+        raise connection_error

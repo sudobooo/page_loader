@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
 
 """page_loader script."""
-import os
-import sys
-import argparse
-import logging.config
+import os  # pragma: no cover
+import sys  # pragma: no cover
+import argparse  # pragma: no cover
+import logging.config  # pragma: no cover
 
-from page_loader import download
-from page_loader.logging_settings import LOGGING_CONFIG
-from page_loader.logging_settings import log_error, log_info
+from page_loader import download  # pragma: no cover
+from page_loader.logging_settings import LOGGING_CONFIG  # pragma: no cover
 
-CHECK_PERMISSION = 'Check directory permissions: '
-CHECK_FILE = 'File or directory does not exist: '
-CHECK_OPTION = 'Please write "-h" to see the available options'
+SUCCES = 'Content was downloaded while pathing to '
 
 
-def main():
+def main():  # pragma: no cover
 
     logging.config.dictConfig(LOGGING_CONFIG)
 
@@ -56,20 +53,10 @@ def main():
     args = parser.parse_args()
 
     try:
-        print(download(args.url, args.output))
-    except PermissionError as permission:
-        log_error.error(permission)
-        log_info.info(f'{CHECK_PERMISSION}{permission.filename}')
-        sys.exit(1)
-    except FileNotFoundError as file_not_found:
-        log_error.error(file_not_found)
-        log_info.info(f'{CHECK_FILE}{file_not_found.filename}')
-        sys.exit(1)
-    except KeyError as key_error:
-        log_error.error(key_error)
-        log_info.info(CHECK_OPTION)
+        print(f'{SUCCES}{download(args.url, args.output)}')
+    except Exception:
         sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     main()
