@@ -14,7 +14,7 @@ def check_content(url, content, teg):
 
     NOT_FOUND_CLI = f"Needed attributes weren't found in teg '{teg.name}'."
     CHECK_LOGS = 'Check the logs for details'
-    NOT_FOUND_FILE = f"Attributes src or href weren't found in {teg}\n"
+    NOT_FOUND_FILE = f"Attributes src weren't found in {teg}\n"
 
     try:
         if content.startswith('http'):

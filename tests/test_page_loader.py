@@ -1,6 +1,7 @@
 import os
 import requests_mock
 import pytest
+import stat
 from tempfile import TemporaryDirectory
 from requests.exceptions import Timeout, ConnectionError, HTTPError
 
@@ -95,9 +96,19 @@ def test_dowloads():
 
 
 @pytest.mark.parametrize('not_content', [
-    Timeout, ConnectionError, HTTPError, PermissionError, FileNotFoundError])
-def test_response_with_error(not_content):
+    Timeout, ConnectionError, HTTPError])
+def test_requests(not_content):
     with requests_mock.Mocker() as m, TemporaryDirectory() as tmpdir:
         m.get(URL, exc=not_content)
         with pytest.raises(Exception):
             assert download(URL, tmpdir)
+
+
+def test_permissions_and_file_not_found():
+    with requests_mock.Mocker() as m, TemporaryDirectory() as tmpdir:
+        m.get(URL)
+        os.chmod(tmpdir, stat.S_IRUSR)
+        with pytest.raises(PermissionError) as permission_error:
+            assert download(URL, tmpdir) == permission_error
+        with pytest.raises(FileNotFoundError) as file_not_found:
+            assert download(URL, 'not_file') == file_not_found
