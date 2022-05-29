@@ -7,8 +7,7 @@ def cli_parse():  # pragma: no cover
     parser = argparse.ArgumentParser(
         description='description: web page downloader',
         prog='page-loader',
-        usage='%(prog)s [options] <url>',
-        add_help=False
+        usage='%(prog)s [options] <url>'
     )
 
     parser.add_argument(
@@ -23,12 +22,6 @@ def cli_parse():  # pragma: no cover
         help='output dir (default: working directory)',
         metavar='[dir]',
         default=os.getcwd()
-    )
-
-    parser.add_argument(
-        '-h', '--help', action='help',
-        default=argparse.SUPPRESS,
-        help='display help for command'
     )
 
     parser.add_argument(

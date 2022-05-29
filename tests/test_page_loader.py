@@ -44,6 +44,11 @@ def read(file):
         'html'
     ),
     (
+        'https://hexlet.io',
+        'hexlet-io.html',
+        'html'
+    ),
+    (
         'https://ru.hexlet.io/professions/python.js',
         'ru-hexlet-io-professions-python.js',
         None
@@ -61,6 +66,7 @@ def test_convert_url(url, expected, type):
 
 
 def test_dowloads():
+
     html_raw = read(RAW)
     html_expected = read(HTML)
     image = get_content(IMG)
@@ -95,11 +101,11 @@ def test_dowloads():
         assert len(os.listdir(actual_path)) == 3
 
 
-@pytest.mark.parametrize('not_content', [
+@pytest.mark.parametrize('errors', [
     Timeout, ConnectionError, HTTPError])
-def test_requests(not_content):
+def test_requests(errors):
     with requests_mock.Mocker() as m, TemporaryDirectory() as tmpdir:
-        m.get(URL, exc=not_content)
+        m.get(URL, exc=errors)
         with pytest.raises(Exception):
             assert download(URL, tmpdir)
 

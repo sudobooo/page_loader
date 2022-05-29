@@ -8,6 +8,9 @@ from page_loader.content_downloader import download_content
 from page_loader.writer import write_html, create_dir
 
 CHECK_URL = 'Failed to access the site. Check your internet access or the url:'
+CHECK_LOG = '\nCheck .page-loader-errors.log for details'
+SUCCESS = 'Successful connection!'
+CONTENT_DOWNLOAD = 'Content was downloaded while pathing to'
 
 
 def download(url, actual_path=os.getcwd()):
@@ -18,23 +21,26 @@ def download(url, actual_path=os.getcwd()):
 
     try:
         response = requests.get(url).text
-        log_info.info('Successful connection!')
+        log_info.info(SUCCESS)
+
         create_dir(path_to_dir)
 
         soup = BeautifulSoup(response, 'html.parser')
         download_content(soup, url, dir, path_to_dir)
+
         write_html(path_html, soup.prettify())
-        log_info.info(f'HTML file was downloaded while pathing to {path_html}')
-        return path_to_dir
+        log_info.info(f'{CONTENT_DOWNLOAD} {path_to_dir}')
+
+        return path_html
     except requests.exceptions.Timeout as timeout:
         log_error.error(timeout)
-        log_info.info(f'{CHECK_URL} {url}')
+        log_info.info(f'{CHECK_URL} {url}. {CHECK_LOG}')
         raise timeout
     except requests.exceptions.HTTPError as http_error:
         log_error.error(http_error)
-        log_info.info(f'{CHECK_URL} {url}')
+        log_info.info(f'{CHECK_URL} {url}. {CHECK_LOG}')
         raise http_error
     except requests.exceptions.ConnectionError as connection_error:
         log_error.error(connection_error)
-        log_info.info(f'{CHECK_URL} {url}')
+        log_info.info(f'{CHECK_URL} {url}. {CHECK_LOG}')
         raise connection_error

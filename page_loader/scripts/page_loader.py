@@ -8,7 +8,7 @@ from page_loader import download
 from page_loader.logging_settings import LOGGING_CONFIG
 from page_loader.cli_parser import cli_parse
 
-SUCCES = 'Content was downloaded while pathing to '
+SUCCES = 'HTML file was downloaded while pathing to'
 
 
 def main():
@@ -18,7 +18,7 @@ def main():
     args = cli_parse()
 
     try:
-        print(f'{SUCCES}{download(args.url, args.output)}')
+        print(f'{SUCCES} {download(args.url, args.output)}')
     except Exception:
         sys.exit(1)
 
