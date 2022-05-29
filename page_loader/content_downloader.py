@@ -36,7 +36,6 @@ def download_content(data, url, dir, path):  # noqa: C901
 
             try:
                 content_response = requests.get(content_link)
-                content_response.raise_for_status()
             except requests.exceptions.HTTPError as http_error:
                 log_error.error(http_error)
             except requests.exceptions.Timeout as timeout:
