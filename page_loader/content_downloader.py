@@ -35,7 +35,8 @@ def download_content(data, url, dir, path):  # noqa: C901
             teg[attribute] = os.path.join(dir, convert(content_link))
 
             try:
-                content_response = requests.get(content_link).content
+                content_response = requests.get(content_link)
+                content_response.raise_for_status()
             except requests.exceptions.HTTPError as http_error:
                 log_error.error(http_error)
             except requests.exceptions.Timeout as timeout:
@@ -43,4 +44,4 @@ def download_content(data, url, dir, path):  # noqa: C901
             except requests.exceptions.ConnectionError as connection_error:
                 log_error.error(connection_error)
 
-            write_content(path_content, content_response)
+            write_content(path_content, content_response.content)

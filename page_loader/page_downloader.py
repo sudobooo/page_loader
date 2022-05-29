@@ -26,12 +26,13 @@ def download(url, actual_path=os.getcwd()):  # noqa: C901
     path_html = os.path.join(actual_path, convert(url, 'html'))
 
     try:
-        response = requests.get(url).text
+        response = requests.get(url)
+        response.raise_for_status()
         log_info.info(SUCCESS)
 
         create_dir(path_to_dir)
 
-        soup = BeautifulSoup(response, 'html.parser')
+        soup = BeautifulSoup(response.text, 'html.parser')
         download_content(soup, url, dir, path_to_dir)
 
         write_html(path_html, soup.prettify())
@@ -51,11 +52,3 @@ def download(url, actual_path=os.getcwd()):  # noqa: C901
         log_error.error(connection_error)
         log_info.info(f'{CHECK_URL} {url}. {CHECK_LOG}')
         raise connection_error
-    except requests.exceptions.ConnectTimeout as connection_timeout:
-        log_error.error(connection_timeout)
-        log_info.info(f'{CHECK_URL} {url}. {CHECK_LOG}')
-        raise connection_timeout
-    except requests.exceptions.TooManyRedirects as too_many_redirects:
-        log_error.error(too_many_redirects)
-        log_info.info(f'{CHECK_URL} {url}. {CHECK_LOG}')
-        raise too_many_redirects
