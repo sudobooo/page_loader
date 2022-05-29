@@ -3,7 +3,11 @@ import requests_mock
 import pytest
 import stat
 from tempfile import TemporaryDirectory
-from requests.exceptions import Timeout, ConnectionError, HTTPError
+from requests.exceptions import (Timeout,
+                                 ConnectionError,
+                                 HTTPError,
+                                 ConnectTimeout,
+                                 TooManyRedirects)
 
 from page_loader.page_downloader import download
 from page_loader.url_converter import convert
@@ -102,7 +106,7 @@ def test_dowloads():
 
 
 @pytest.mark.parametrize('errors', [
-    Timeout, ConnectionError, HTTPError])
+    Timeout, ConnectionError, HTTPError, ConnectTimeout, TooManyRedirects])
 def test_requests(errors):
     with requests_mock.Mocker() as m, TemporaryDirectory() as tmpdir:
         m.get(URL, exc=errors)

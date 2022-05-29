@@ -19,7 +19,7 @@ CONTENT_DOWNLOAD = 'Content was downloaded while pathing to'
 logging.config.dictConfig(LOGGING_CONFIG)  # pragma: no cover
 
 
-def download(url, actual_path=os.getcwd()):
+def download(url, actual_path=os.getcwd()):  # noqa: C901
 
     dir = convert(url, 'dir')
     path_to_dir = os.path.join(actual_path, dir)
@@ -51,3 +51,11 @@ def download(url, actual_path=os.getcwd()):
         log_error.error(connection_error)
         log_info.info(f'{CHECK_URL} {url}. {CHECK_LOG}')
         raise connection_error
+    except requests.exceptions.ConnectTimeout as connection_timeout:
+        log_error.error(connection_timeout)
+        log_info.info(f'{CHECK_URL} {url}. {CHECK_LOG}')
+        raise connection_timeout
+    except requests.exceptions.TooManyRedirects as too_many_redirects:
+        log_error.error(too_many_redirects)
+        log_info.info(f'{CHECK_URL} {url}. {CHECK_LOG}')
+        raise too_many_redirects
