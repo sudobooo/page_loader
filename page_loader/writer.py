@@ -24,7 +24,7 @@ def create_dir(path_to_dir):
     try:
         if not os.path.exists(path_to_dir):
             os.mkdir(path_to_dir)
-            log_info.info(PRE_CREATED.format(path_to_dir))
+            log_info.info(f'{CREATED} {path_to_dir}')
         else:
             log_info.info(PRE_CREATED.format(path_to_dir))
     except PermissionError as permission:
