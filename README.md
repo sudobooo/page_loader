@@ -47,7 +47,7 @@ optional arguments:
 
 ### Logging
 
-All error logs are written to .page-loader-errors.log
+All error logs are written to .page-loader-errors.log.
 The file is created in the working directory.
 
 ## Demonstration of the program
