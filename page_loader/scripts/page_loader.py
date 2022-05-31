@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 """page_loader script."""
+
 import sys  # pragma: no cover
 
 from page_loader import download
@@ -8,6 +9,9 @@ from page_loader.cli_parser import cli_parse
 
 
 def main():
+    """Parse values from CLI.
+    Starts the download.
+    Checks for exceptions that should terminate the program."""
 
     args = cli_parse()
 

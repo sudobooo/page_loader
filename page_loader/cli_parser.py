@@ -1,8 +1,12 @@
+"""Parsing arguments from CLI"""
+
 import argparse  # pragma: no cover
 import os  # pragma: no cover
 
 
 def cli_parse():  # pragma: no cover
+    """Parse arguments from CLI.
+    Return arguments as a string."""
 
     parser = argparse.ArgumentParser(
         description='description: web page downloader',

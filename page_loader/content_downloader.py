@@ -1,3 +1,5 @@
+"""Downloading content from a web page"""
+
 import os
 import requests
 from progress.bar import ShadyBar
@@ -9,6 +11,12 @@ from page_loader.logging_settings import log_error
 
 
 def download_content(data, url, dir, path):  # noqa: C901
+    """Takes four arguments:
+    'data' is html page data,
+    'url' is link to download page,
+    'dir' is path to the directory to save a content,
+    'path' is full path to content.
+    The result of execution is the write content."""
 
     TAGS_AND_ATTRIBUTES = {
         'img': 'src',

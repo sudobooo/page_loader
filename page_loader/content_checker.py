@@ -1,3 +1,5 @@
+"""Checking url addresses with content"""
+
 from page_loader.logging_settings import log_error
 from urllib.parse import urljoin, urlparse
 
@@ -6,6 +8,9 @@ NOT_SAME = "Content was not downloaded because it's on a different host:"
 
 
 def same_netloc(first_url, second_url):
+    """Takes two arguments: 'first_url' and 'second_url'.
+    Checks if the netlock is the same.
+    Return True of False."""
 
     first_parse_link = urlparse(first_url)
     second_parse_link = urlparse(second_url)
@@ -14,6 +19,11 @@ def same_netloc(first_url, second_url):
 
 
 def check_content(url, content, teg):
+    """Takes three arguments:
+    'url' is website address,
+    'content' is url with content,
+    'teg' is HTML tag containing url with content.
+    Return valid url link with content."""
 
     try:
         if content.startswith('http'):

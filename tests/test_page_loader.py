@@ -41,12 +41,12 @@ def read(file):
     (
         'https://ru.hexlet.io',
         'ru-hexlet-io.html',
-        'html'
+        None
     ),
     (
         'https://hexlet.io',
         'hexlet-io.html',
-        'html'
+        None
     ),
     (
         'https://ru.hexlet.io/professions/python.js',

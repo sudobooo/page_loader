@@ -1,3 +1,5 @@
+"""Downloading a web page and saving to the desired path"""
+
 import requests
 import os
 import logging.config
@@ -19,11 +21,15 @@ CONTENT_DOWNLOAD = 'Content was downloaded while pathing to'
 logging.config.dictConfig(LOGGING_CONFIG)  # pragma: no cover
 
 
-def download(url, actual_path=os.getcwd()):  # noqa: C901
+def download(url, actual_path=os.getcwd()):
+    """Takes two arguments:
+    'url' is link to web page,
+    'actual_path' is the path where you want to save the result.
+    Returns the path to the downloaded page in html format."""
 
     dir = convert(url, 'dir')
     path_to_dir = os.path.join(actual_path, dir)
-    path_html = os.path.join(actual_path, convert(url, 'html'))
+    path_html = os.path.join(actual_path, convert(url))
 
     try:
         response = requests.get(url)
@@ -33,12 +39,13 @@ def download(url, actual_path=os.getcwd()):  # noqa: C901
         create_dir(path_to_dir)
 
         soup = BeautifulSoup(response.text, 'html.parser')
-        download_content(soup, url, dir, path_to_dir)
 
-        write_html(path_html, soup.prettify())
+        download_content(soup, url, dir, path_to_dir)
         log_info.info(f'{CONTENT_DOWNLOAD} {path_to_dir}')
 
+        write_html(path_html, soup.prettify())
         log_info.info(f'{HTML_DOWNLOAD} {path_html}')
+
         return path_html
     except requests.exceptions.Timeout as timeout:
         log_error.error(timeout)

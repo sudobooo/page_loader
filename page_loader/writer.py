@@ -1,3 +1,5 @@
+"""Writes files and creates directories."""
+
 import os
 from page_loader.logging_settings import log_info, log_error
 
@@ -7,19 +9,34 @@ CREATED = 'Directory was created while pathing to'
 PRE_CREATED = 'Directory {0} is pre-created'
 
 
-def write_html(path, content):
+def write_html(path, html):
+    """Takes two arguments:
+    'path' is the path to the file.
+    'html' is HTML data.
+    The result of the execution is the written
+    HTML data at the specified path."""
 
     with open(path, "w", encoding="utf-8") as file:
-        file.write(content)
+        file.write(html)
 
 
 def write_content(path, content):
+    """Takes two arguments:
+    'path' is the path to the file.
+    'content' is content data.
+    The result of the execution is the written
+    content data at the specified path."""
 
     with open(path, "wb") as file:
         file.write(content)
 
 
 def create_dir(path_to_dir):
+    """Takes one argument:
+    'path_to_dir' is path to directory.
+    The result of the execution is the creation of a directory
+    at the specified path or an indication
+    that the directory already exists."""
 
     try:
         if not os.path.exists(path_to_dir):

@@ -1,3 +1,5 @@
+"""Settings for logging."""
+
 import logging
 
 ERROR_LOG_FILENAME = ".page-loader-errors.log"
