@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "hexlet-code"
 version = "0.1.0"
-description = ""
+description = "Downloads a web page with content."
 authors = ["sudobooo <marsdoghelena@gmail.com>"]
 packages = [
   { include = "page_loader" },
