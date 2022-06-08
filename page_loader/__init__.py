@@ -1,5 +1,5 @@
 """Page-loader engine"""
 
-from page_loader.page_downloader import download
+from page_loader.download import download
 
 __all__ = ('download',)

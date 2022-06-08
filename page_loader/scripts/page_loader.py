@@ -5,7 +5,7 @@
 import sys  # pragma: no cover
 
 from page_loader import download
-from page_loader.cli_parser import cli_parse
+from page_loader import cli
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
     Starts the download.
     Checks for exceptions that should terminate the program."""
 
-    args = cli_parse()
+    args = cli.parse()
 
     try:
         download(args.url, args.output)

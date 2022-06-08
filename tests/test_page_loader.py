@@ -5,9 +5,8 @@ import stat
 from tempfile import TemporaryDirectory
 from requests.exceptions import Timeout, ConnectionError, HTTPError
 
-from page_loader.page_downloader import download
-from page_loader.url_converter import convert
-
+from page_loader.download import download
+from page_loader import url
 
 URL = 'https://ru.hexlet.io'
 URL_IMG = 'https://ru.hexlet.io/professions/python.png'
@@ -27,41 +26,51 @@ EXPECTED_CSS = os.path.join(DIRECTORY, 'ru-hexlet-io-assets-application.css')
 EXPECTED_JS = os.path.join(DIRECTORY, 'ru-hexlet-io-packs-js-runtime.js')
 
 
-def get_content(file):
-    with open(file, 'rb') as file:
-        return file.read()
-
-
-def read(file):
+def read(file, binary=False):
+    if binary is True:
+        with open(file, 'rb') as file:
+            return file.read()
     with open(file, 'r') as f:
         return f.read()
 
 
-@pytest.mark.parametrize('url, expected, type', [
+@pytest.mark.parametrize('link, expected', [
     (
         'https://ru.hexlet.io',
-        'ru-hexlet-io.html',
-        None
+        'ru-hexlet-io.html'
     ),
     (
         'https://hexlet.io',
-        'hexlet-io.html',
-        None
+        'hexlet-io.html'
     ),
     (
         'https://ru.hexlet.io/professions/python.js',
-        'ru-hexlet-io-professions-python.js',
-        None
-    ),
-    (
-        'https://ru.hexlet.io/professions',
-        'ru-hexlet-io-professions_files',
-        'dir'
+        'ru-hexlet-io-professions-python.js'
     )
 ])
-def test_convert_url(url, expected, type):
+def test_to_filename(link, expected):
 
-    actual = convert(url, type)
+    actual = url.to_filename(link)
+    assert actual == expected
+
+
+@pytest.mark.parametrize('link, expected', [
+    (
+        'https://ru.hexlet.io',
+        'ru-hexlet-io_files'
+    ),
+    (
+        'https://hexlet.io',
+        'hexlet-io_files'
+    ),
+    (
+        'https://ru.hexlet.io/professions/python.js',
+        'ru-hexlet-io-professions-python_files'
+    )
+])
+def test_to_dirname(link, expected):
+
+    actual = url.to_dirname(link)
     assert actual == expected
 
 
@@ -69,9 +78,9 @@ def test_dowloads():
 
     html_raw = read(RAW)
     html_expected = read(HTML)
-    image = get_content(IMG)
-    css = get_content(CSS)
-    js = get_content(JS)
+    image = read(IMG, binary=True)
+    css = read(CSS, binary=True)
+    js = read(JS, binary=True)
 
     with requests_mock.Mocker() as m, TemporaryDirectory() as tmpdir:
         m.get(URL, text=html_raw)
@@ -88,13 +97,13 @@ def test_dowloads():
         actual_html = read(html_path)
         assert actual_html == html_expected
 
-        actual_img = get_content(img_path)
+        actual_img = read(img_path, binary=True)
         assert actual_img == image
 
-        actual_css = get_content(css_path)
+        actual_css = read(css_path, binary=True)
         assert actual_css == css
 
-        actual_js = get_content(js_path)
+        actual_js = read(js_path, binary=True)
         assert actual_js == js
 
         actual_path = os.path.join(tmpdir, DIRECTORY)

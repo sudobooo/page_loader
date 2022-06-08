@@ -4,6 +4,30 @@ import re
 from urllib.parse import urlparse
 
 
+def to_filename(url):
+    """Takes two arguments:
+    'url' is text link to website,
+    Returns the name for file."""
+
+    result, format = convert_name(url)
+
+    output = f'{result}.{format}'
+    if output.endswith('.'):
+        output += 'html'
+    return output
+
+
+def to_dirname(url):
+    """Takes two arguments:
+    'url' is text link to website,
+    Returns the name for directory."""
+
+    result, format = convert_name(url)
+    extension = '_files'
+
+    return f'{result}{extension}'
+
+
 def convert_name(url):
     """Takes one argument:
     'url' is text link to website.
@@ -22,25 +46,6 @@ def convert_name(url):
         format = ''
 
     return result, format
-
-
-def convert(url, type=None):
-    """Takes two arguments:
-    'url' is text link to website,
-    'type' is specifies whether the name is for a file or for a directory.
-    Returns the finished name."""
-
-    result, format = convert_name(url)
-    type_dict = {'dir': '_files'}
-
-    if type is not None:
-        extension = type_dict.get(type)
-        return f'{result}{extension}'
-
-    output = f'{result}.{format}'
-    if output.endswith('.'):
-        output += 'html'
-    return output
 
 
 def replace_chars(text):

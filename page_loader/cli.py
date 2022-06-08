@@ -4,7 +4,7 @@ import argparse  # pragma: no cover
 import os  # pragma: no cover
 
 
-def cli_parse():  # pragma: no cover
+def parse():  # pragma: no cover
     """Parse arguments from CLI.
     Return arguments as a string."""
 
