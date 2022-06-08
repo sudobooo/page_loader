@@ -27,11 +27,11 @@ EXPECTED_JS = os.path.join(DIRECTORY, 'ru-hexlet-io-packs-js-runtime.js')
 
 
 def read(file, binary=False):
-    if binary is True:
-        with open(file, 'rb') as file:
-            return file.read()
-    with open(file, 'r') as f:
-        return f.read()
+    if not binary:
+        with open(file, 'r') as f:
+            return f.read()
+    with open(file, 'rb') as file:
+        return file.read()
 
 
 @pytest.mark.parametrize('link, expected', [
