@@ -2,7 +2,7 @@
 
 """page_loader script."""
 
-import sys  # pragma: no cover
+import sys
 
 from page_loader import download
 from page_loader import cli

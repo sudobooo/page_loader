@@ -1,7 +1,7 @@
 """Parsing arguments from CLI"""
 
-import argparse  # pragma: no cover
-import os  # pragma: no cover
+import argparse
+import os
 
 
 def parse():  # pragma: no cover
