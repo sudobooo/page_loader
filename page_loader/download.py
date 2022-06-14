@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 
 from page_loader import url
 from page_loader.assets import get_resources
-from page_loader.writer import write, create_dir
+from page_loader.storage import save, create_dir
 from page_loader.logging_settings import LOGGING_CONFIG
 from page_loader.logging_settings import log_error, log_info
 
@@ -28,7 +28,7 @@ def download(link, actual_path=os.getcwd()):
     resources = get_resources(soup, link, dir)
 
     path_html = os.path.join(actual_path, url.to_filename(link))
-    write(path_html, soup.prettify())
+    save(path_html, soup.prettify())
 
     if len(resources) > 0:
         path_to_dir = os.path.join(actual_path, dir)
@@ -93,4 +93,4 @@ def download_content(resources, path):
             except requests.exceptions.ConnectionError as connection_error:
                 log_error.error(connection_error)
 
-            write(path_content, content_response.content, binary=True)
+            save(path_content, content_response.content)

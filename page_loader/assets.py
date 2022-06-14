@@ -15,6 +15,7 @@ def get_resources(data, link, dir):
     Returns a list of resources to download.
     """
 
+    check_attribute = "Attributes src weren't found in {0}\n"
     TAGS_AND_ATTRIBUTES = {
         'img': 'src',
         'script': 'src',
@@ -26,6 +27,9 @@ def get_resources(data, link, dir):
 
         attribute = TAGS_AND_ATTRIBUTES.get(teg.name)
         content = teg.get(attribute)
+        if content is None:
+            log_error.error(check_attribute.format(teg))
+            continue
         content_link = check_content(link, content, teg)
         if not content_link:
             continue
@@ -35,7 +39,7 @@ def get_resources(data, link, dir):
     return resources
 
 
-def same_netloc(first_url, second_url):
+def is_local(first_url, second_url):
     """Takes two arguments: 'first_url' and 'second_url'.
     Checks if the netlock is the same.
     Return True of False."""
@@ -53,17 +57,15 @@ def check_content(url, content, teg):
     'teg' is HTML tag containing url with content.
     Return valid url link with content."""
 
-    try:
-        if content.startswith('http'):
-            if not same_netloc(content, url):
-                log_error.error(f"Content was not downloaded because it's"
-                                f' on a different host: {content}')
-                return False
-            return content
+    if content.startswith('http'):
+        if not is_local(content, url):
+            log_error.error(f"Content was not downloaded because it's"
+                            f' on a different host: {content}')
+            return False
+        return content
 
-        if not content.startswith('/'):
-            content = '/' + content
-        content_link = urljoin(url, content)
-        return content_link
-    except AttributeError:
-        log_error.error("Attributes src weren't found in {0}\n".format(teg))
+    if not content.startswith('/'):
+        content = '/' + content
+
+    content_link = urljoin(url, content)
+    return content_link

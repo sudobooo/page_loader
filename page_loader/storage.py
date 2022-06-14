@@ -4,19 +4,18 @@ import os
 from page_loader.logging_settings import log_info, log_error
 
 
-def write(path, data, binary=False):
+def save(path, data):
     """Takes two arguments:
     'path' is the path to the file.
     'data' is the data to be written.
     The result of the execution is the written
     data at the specified path."""
     try:
-        if not binary:
-            with open(path, "w", encoding="utf-8") as file:
-                file.write(data)
-        else:
-            with open(path, "wb") as file:
-                file.write(data)
+        with open(path, "w", encoding="utf-8") as file:
+            file.write(data)
+    except TypeError:
+        with open(path, "wb") as file:
+            file.write(data)
     except PermissionError as permission:
         log_error.error(permission)
         log_info.info(f'Check directory permissions: {permission.filename}')
