@@ -1,15 +1,17 @@
 """Collecting a list of resources with content for download"""
 
 import os
+import requests
+from bs4 import BeautifulSoup
 
 from page_loader.logging_settings import log_error
 from urllib.parse import urljoin, urlparse
 from page_loader import url
 
 
-def get_resources(data, link, dir):
+def get_resources(response, link, dir):
     """Takes three arguments:
-    'data' is html page data,
+    'response' is html page,
     'link' is link to download page,
     'dir' is path to the directory to save a content.
     Returns a list of resources to download.
@@ -20,6 +22,7 @@ def get_resources(data, link, dir):
         'script': 'src',
         'link': 'href',
     }
+    data = BeautifulSoup(response.text, 'html.parser')
     resources = []
 
     for teg in data.find_all(TAGS_AND_ATTRIBUTES.keys()):
@@ -42,4 +45,13 @@ def get_resources(data, link, dir):
         resources.append(content_link)
 
         teg[attribute] = os.path.join(dir, url.to_filename(content_link))
-    return resources
+    return resources, data.prettify()
+
+
+def get_data(link):
+    """'link' is url to web page.
+    Returns response."""
+
+    response = requests.get(link)
+    response.raise_for_status()
+    return response
