@@ -2,14 +2,13 @@
 
 import os
 import logging.config
-import requests
 from progress.bar import ShadyBar
 
 from page_loader import url
 from page_loader.assets import get_resources, get_data
 from page_loader.storage import save, create_dir
 from page_loader.logging_settings import LOGGING_CONFIG
-from page_loader.logging_settings import log_info, log_error
+from page_loader.logging_settings import log_info, log_error, ExpectedException
 
 
 logging.config.dictConfig(LOGGING_CONFIG)  # pragma: no cover
@@ -27,7 +26,7 @@ def download(link, actual_path=os.getcwd()):
     try:
         response = get_data(link)
         log_info.info('Successful connection!')
-    except requests.RequestException as error:
+    except ExpectedException() as error:
         log_error.error(error)
         log_info.info(f'\n{check_url} {link}\n{check_log}')
         raise error
@@ -65,7 +64,7 @@ def download_content(resources, path):
             bar.next()
             try:
                 content_response = get_data(resource)
-            except requests.RequestException as error:
+            except ExpectedException as error:
                 log_error.error(error)
             path_content = os.path.join(path, url.to_filename(resource))
 

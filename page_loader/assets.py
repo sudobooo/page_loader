@@ -4,7 +4,7 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
-from page_loader.logging_settings import log_error
+from page_loader.logging_settings import log_error, ExpectedException
 from urllib.parse import urljoin, urlparse
 from page_loader import url
 
@@ -52,6 +52,9 @@ def get_data(link):
     """'link' is url to web page.
     Returns response."""
 
-    response = requests.get(link)
-    response.raise_for_status()
+    try:
+        response = requests.get(link)
+        response.raise_for_status()
+    except requests.RequestException as error:
+        raise ExpectedException(error)
     return response

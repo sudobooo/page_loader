@@ -6,6 +6,7 @@ from tempfile import TemporaryDirectory
 from requests.exceptions import Timeout, ConnectionError, HTTPError
 
 from page_loader.download import download
+from page_loader.logging_settings import ExpectedException
 from page_loader import url
 
 URL = 'https://ru.hexlet.io'
@@ -123,7 +124,7 @@ def test_permissions_and_file_not_found():
     with requests_mock.Mocker() as m, TemporaryDirectory() as tmpdir:
         m.get(URL)
         os.chmod(tmpdir, stat.S_IRUSR)
-        with pytest.raises(PermissionError) as permission_error:
+        with pytest.raises(ExpectedException) as permission_error:
             assert download(URL, tmpdir) == permission_error
-        with pytest.raises(FileNotFoundError) as file_not_found:
+        with pytest.raises(ExpectedException) as file_not_found:
             assert download(URL, 'not_file') == file_not_found

@@ -1,7 +1,7 @@
 """Writes files and creates directories."""
 
 import os
-from page_loader.logging_settings import log_info, log_error
+from page_loader.logging_settings import log_info, log_error, ExpectedException
 
 
 def save(path, data):
@@ -19,12 +19,12 @@ def save(path, data):
     except PermissionError as permission:
         log_error.error(permission)
         log_info.info(f'Check directory permissions: {permission.filename}')
-        raise permission
+        raise ExpectedException(permission)
     except FileNotFoundError as file_not_found:
         log_error.error(file_not_found)
         log_info.info(f'File or directory does not exist: '
                       f'{file_not_found.filename}')
-        raise file_not_found
+        raise ExpectedException(file_not_found)
 
 
 def create_dir(path_to_dir):
