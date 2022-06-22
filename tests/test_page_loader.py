@@ -7,6 +7,7 @@ from requests.exceptions import Timeout, ConnectionError, HTTPError
 
 from page_loader import ExpectedException
 from page_loader.download import download
+from page_loader.assets import get_data, get_resources
 from page_loader import url
 
 URL = 'https://ru.hexlet.io'
@@ -109,6 +110,24 @@ def test_dowloads():
 
         actual_path = os.path.join(tmpdir, DIRECTORY)
         assert len(os.listdir(actual_path)) == 3
+
+
+def test_get_resources():
+    html_raw = read(RAW)
+    html_expected = read(HTML)
+
+    with requests_mock.Mocker() as m:
+        m.get(URL, text=html_raw)
+        response = get_data(URL)
+        resources, processed_html = get_resources(response, URL, DIRECTORY)
+
+        assert processed_html == html_expected
+
+        expected_resources = ['https://ru.hexlet.io/assets/application.css',
+                              'https://ru.hexlet.io/professions/python.png',
+                              'https://ru.hexlet.io/packs/js/runtime.js']
+
+        assert resources == expected_resources
 
 
 @pytest.mark.parametrize('errors', [
