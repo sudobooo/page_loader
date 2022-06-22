@@ -4,7 +4,7 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
-from page_loader.logging_settings import log_error, ExpectedException
+from page_loader.logging_settings import log_error, log_info
 from urllib.parse import urljoin, urlparse
 from page_loader import url
 
@@ -52,9 +52,16 @@ def get_data(link):
     """'link' is url to web page.
     Returns response."""
 
+    from page_loader import ExpectedException
+
+    check_log = 'Check .page-loader-errors.log for details'
+    check_url = 'Failed to access the site. Check your internet access or url:'
+
     try:
         response = requests.get(link)
         response.raise_for_status()
     except requests.RequestException as error:
+        log_error.error(error)
+        log_info.info(f'\n{check_url} {link}\n{check_log}')
         raise ExpectedException(error)
     return response

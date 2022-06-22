@@ -48,9 +48,3 @@ LOGGING_CONFIG = {
 
 log_error = logging.getLogger('page-loader-error')
 log_info = logging.getLogger('page-loader-info')
-
-
-class ExpectedException(Exception):
-    """Own class for catching and handling exceptions."""
-
-    pass

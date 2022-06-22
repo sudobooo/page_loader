@@ -8,7 +8,7 @@ from page_loader import url
 from page_loader.assets import get_resources, get_data
 from page_loader.storage import save, create_dir
 from page_loader.logging_settings import LOGGING_CONFIG
-from page_loader.logging_settings import log_info, log_error, ExpectedException
+from page_loader.logging_settings import log_info, log_error
 
 
 logging.config.dictConfig(LOGGING_CONFIG)  # pragma: no cover
@@ -20,16 +20,8 @@ def download(link, actual_path=os.getcwd()):
     'actual_path' is the path where you want to save the result.
     Returns the path to the downloaded page in html format."""
 
-    check_log = 'Check .page-loader-errors.log for details'
-    check_url = 'Failed to access the site. Check your internet access or url:'
-
-    try:
-        response = get_data(link)
-        log_info.info('Successful connection!')
-    except ExpectedException() as error:
-        log_error.error(error)
-        log_info.info(f'\n{check_url} {link}\n{check_log}')
-        raise error
+    response = get_data(link)
+    log_info.info('Successful connection!')
 
     dir = url.to_dirname(link)
     resources, changed_html = get_resources(response, link, dir)
@@ -37,7 +29,7 @@ def download(link, actual_path=os.getcwd()):
     path_html = os.path.join(actual_path, url.to_filename(link))
     save(path_html, changed_html)
 
-    if len(resources) > 0:
+    if len(resources) != 0:
         path_to_dir = os.path.join(actual_path, dir)
         create_dir(path_to_dir)
         download_content(resources, path_to_dir)
@@ -54,6 +46,8 @@ def download_content(resources, path):
     'resources' is list of download links,
     'path' is full path to content.
     The result of execution is the write content."""
+
+    from page_loader import ExpectedException
 
     len_for_bar = len(resources)
     with ShadyBar('Downloading',

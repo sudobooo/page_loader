@@ -5,8 +5,8 @@ import stat
 from tempfile import TemporaryDirectory
 from requests.exceptions import Timeout, ConnectionError, HTTPError
 
+from page_loader import ExpectedException
 from page_loader.download import download
-from page_loader.logging_settings import ExpectedException
 from page_loader import url
 
 URL = 'https://ru.hexlet.io'
